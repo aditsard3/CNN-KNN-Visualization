@@ -8,7 +8,9 @@
 </head>
 <body onload="main()">
     <h1>Visualizing a CNN-KNN Model on the CIFAR10 Dataset using D3.js</h1>
-    <p>This is the train set reduced to 2 dimensions using PCA. Hovering over points loads an image, and highlights the 7 nearest neighbors in the reduced dimensional space.</p>
+    <p>This is the train set reduced to 2 dimensions using PCA. Hovering over points loads an image, and highlights the number nearest neighbors (set by the slider) in the reduced dimensional space.</p>
+    <input type="range" id="slider" min="1" max="25" value="7" step="2" />
+    <span id="sliderValue">7</span>
     <div id="scatterPlot"></div>
 </body>
 </html>
