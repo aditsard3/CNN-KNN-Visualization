@@ -112,16 +112,16 @@ const tooltip = d3.select("body").append("div")
 function showTooltip(d, indices) {
     const label = classes[d.label];
     const imgFile = `images/${label}.jpeg`;
-    const neighborLabels = indices.map((index) => classes[data[index].label]);
-    const list = neighborLabels.join(", ");
+    // const neighborLabels = indices.map((index) => classes[data[index].label]);
+    // const list = neighborLabels.join(", ");
     tooltip.style("display", "block")
         .style("left", "1300px")
         .style("top", "400px")
         .html(`
             <p>point label: ${label}</p>
-            <img src="${imgFile}" width="100" height="100">
-            <p>neighbor labels: ${list}</p>
-            `
+            <img src="${imgFile}" width="100" height="100">`
+            /*<p>neighbor labels: ${list}</p>
+            `*/
         );
 }
 
