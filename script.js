@@ -35,7 +35,7 @@ function canvas(data){
                         .attr("width", width + margin.left + margin.right)
                         .attr("height", height + margin.top + margin.bottom)
                     .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");        
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -59,6 +59,16 @@ function canvas(data){
 
 // Plot the points
 function plot(svg, data, xScale, yScale, colorScale, n) {
+    const tooltip = d3.select("body").append("div")
+                        .attr("class", "tooltip")
+                        .style("position", "absolute")
+                        .style("display", "none")
+                        .style("pointer-events", "none")
+                        .style("background-color", "rgba(0, 0, 0, 0.7)")
+                        .style("color", "white")
+                        .style("padding", "5px")
+                        .style("border-radius", "5px");
+
     svg.selectAll("circle")
         .data(data)
         .enter().append("circle")
@@ -71,11 +81,21 @@ function plot(svg, data, xScale, yScale, colorScale, n) {
             const indices = getIndices(distances, n);
             svg.selectAll("circle")
                 .style("stroke", (d, i) => indices.includes(i) ? "black" : "none")
-                .style("stroke-width", (d, i) => indices.includes(i) ? 2 : 0);
+                .style("stroke-width", (d, i) => indices.includes(i) ? 2 : 0);            
             
-            showTooltip(d, indices);
+            pointLabel = classes[d.label];
+            tooltip.style("display", "block")
+                .style("left", "1300px")
+                .style("top", "400px")
+                .html(`
+                    <p>point label: ${pointLabel}</p>
+                    <img src="images/${pointLabel}.jpeg" width="100" height="100">
+                    <p>neighbor Hello!</p>`
+                    );
         })
-        .on("mouseout", () => hideTooltip());
+        .on("mouseout", () => {            
+            tooltip.style("display", "none");
+        });
 }
 
 // Legend
@@ -96,37 +116,6 @@ function displayLegend(svg, colorScale, width) {
         .attr("dy", "0.35em")
         .style("text-anchor", "end")
         .text((d) => classes[d]);
-}
-
-// Tooltip
-const tooltip = d3.select("body").append("div")
-                    .attr("class", "tooltip")
-                    .style("position", "absolute")
-                    .style("display", "none")
-                    .style("pointer-events", "none")
-                    .style("background-color", "rgba(0, 0, 0, 0.7)")
-                    .style("color", "white")
-                    .style("padding", "5px")
-                    .style("border-radius", "5px");
-
-function showTooltip(d, indices) {
-    const label = classes[d.label];
-    const imgFile = `images/${label}.jpeg`;
-    // const neighborLabels = indices.map((index) => classes[data[index].label]);
-    // const list = neighborLabels.join(", ");
-    tooltip.style("display", "block")
-        .style("left", "1300px")
-        .style("top", "400px")
-        .html(`
-            <p>point label: ${label}</p>
-            <img src="${imgFile}" width="100" height="100">`
-            /*<p>neighbor labels: ${list}</p>
-            `*/
-        );
-}
-
-function hideTooltip() {
-    tooltip.style("display", "none");
 }
 
 function main() {
